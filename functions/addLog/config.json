@@ -1,4 +1,5 @@
 {
     "name": "addLog",
-    "private": false
+    "private": false,
+    "run_as_system": true
 }
