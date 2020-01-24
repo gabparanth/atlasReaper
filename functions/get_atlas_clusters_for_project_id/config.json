@@ -1,0 +1,5 @@
+{
+    "name": "get_atlas_clusters_for_project_id",
+    "private": false,
+    "run_as_system": true
+}
