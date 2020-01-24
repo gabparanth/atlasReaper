@@ -1,6 +1,6 @@
 // type : error or success
 
-exports = function(level, context, message, tag)
+exports = function(level, logger, message, tag)
 {
   const mongodb = context.services.get("MasterAtlas");
   const logCollection = mongodb.db("atlas_reaper").collection("log");
@@ -9,7 +9,7 @@ exports = function(level, context, message, tag)
   
   var logObject = { "level" : level,
                     "date": date, 
-                    "context" : context,
+                    "logger" : logger,
                     "message": message,
                     "tag" : tag };
   return logCollection.insertOne(logObject);
