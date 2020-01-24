@@ -1,5 +1,5 @@
 {
-    "database": "atlas_reaper",
+    "database": "atlas",
     "collection": "log",
     "roles": [
         {

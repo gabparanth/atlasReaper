@@ -3,7 +3,7 @@
 exports = function(level, logger, message, tag)
 {
   const mongodb = context.services.get("MasterAtlas");
-  const logCollection = mongodb.db("atlas_reaper").collection("log");
+  const logCollection = mongodb.db("atlas").collection("log");
   
   var date = new Date(Date.now());
   
