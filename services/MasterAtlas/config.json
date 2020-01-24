@@ -3,7 +3,7 @@
     "name": "MasterAtlas",
     "type": "mongodb-atlas",
     "config": {
-        "clusterName": 'rpi-sensor-data',
+        "clusterName": "rpi-sensor-data",
         "readPreference": "primary",
         "wireProtocolEnabled": true
     },
