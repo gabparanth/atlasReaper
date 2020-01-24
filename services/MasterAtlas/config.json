@@ -1,7 +1,9 @@
 {
+    "id": "5e2b3ca7756ccc6ca10e3ad0",
     "name": "MasterAtlas",
     "type": "mongodb-atlas",
     "config": {
+        "clusterName": null,
         "readPreference": "primary",
         "wireProtocolEnabled": false
     },

@@ -1,5 +1,9 @@
 {
+    "app_id": "atlas-reaper-zrvos",
     "config_version": 20180301,
+    "name": "atlas-reaper",
+    "location": "IE",
+    "deployment_model": "LOCAL",
     "security": {},
     "custom_user_data_config": {
         "enabled": false
