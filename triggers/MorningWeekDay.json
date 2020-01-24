@@ -1,0 +1,9 @@
+{
+    "name": "MorningWeekDay",
+    "type": "SCHEDULED",
+    "config": {
+        "schedule": "0 7 * * MON-FRI"
+    },
+    "function_name": "theSeeder",
+    "disabled": false
+}

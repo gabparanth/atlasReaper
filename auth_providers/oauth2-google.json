@@ -1,0 +1,30 @@
+{
+    "name": "oauth2-google",
+    "type": "oauth2-google",
+    "config": {
+        "clientId": "765924279419-3tnoiifu98pksmts3gasur716s2pie67.apps.googleusercontent.com"
+    },
+    "secret_config": {
+        "clientSecret": "GoogleOAuthClientSecret"
+    },
+    "disabled": false,
+    "metadata_fields": [
+        {
+            "required": false,
+            "name": "name"
+        },
+        {
+            "required": false,
+            "name": "email"
+        }
+    ],
+    "domain_restrictions": [
+        "mongodb.com",
+        "10gen.com"
+    ],
+    "redirect_uris": [
+        "https://master-axqzn.mongodbstitch.com/index.html",
+        "http://localhost:8080/index.html",
+        "https://stitch-statichosting-prod.s3.amazonaws.com/5cc03403c71ee45321ffc0ce/index.html"
+    ]
+}

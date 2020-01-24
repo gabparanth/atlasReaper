@@ -1,0 +1,21 @@
+{
+    "database": "atlas",
+    "collection": "clusters",
+    "roles": [
+        {
+            "name": "default",
+            "apply_when": {},
+            "write": true,
+            "insert": true,
+            "delete": true,
+            "additional_fields": {}
+        }
+    ],
+    "schema": {
+        "properties": {
+            "_id": {
+                "bsonType": "string"
+            }
+        }
+    }
+}

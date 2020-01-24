@@ -1,0 +1,9 @@
+{
+    "name": "EveningWeekDay",
+    "type": "SCHEDULED",
+    "config": {
+        "schedule": "0 21 * * *"
+    },
+    "function_name": "theReaperArch",
+    "disabled": false
+}
