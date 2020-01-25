@@ -28,10 +28,13 @@ exports = function(url)
       const digestHeader = `Digest username="${username}", realm="${realm}", nonce="${nonce}", uri="${path}", qop=${qop}, nc=${nc}, cnonce="${cnonce}", response="${response}", algorithm=MD5`;
 
       return http.get({ url: url, headers: { 'Authorization': [ digestHeader ], "Content-Type": [ "application/json" ] } })
-            .then(({ body }) => {
-                return JSON.parse(body.text());
+            .then( http_response => {
+              
+              const ejson_body = EJSON.parse(http_response.text());
+              context.functions.execute('log_message', 'INFO', 'atlas_api', ejson_body);
+              return ejson_body;
               })
-            .catch(function(error) {
+            .catch( error => {
                 context.functions.execute('log_message', 'ERROR', 'atlas_api', error);
             });
     });
