@@ -30,9 +30,16 @@ exports = function(url)
       return http.get({ url: url, headers: { 'Authorization': [ digestHeader ], "Content-Type": [ "application/json" ] } })
             .then( http_response => {
               
-              const ejson_body = EJSON.parse(http_response.body.text());
-              context.functions.execute('log_message', 'INFO', 'atlas_api', ejson_body);
-              return ejson_body;
+                ret = EJSON.parse(http_response.body.text());
+                if ('error' in ret)
+                {
+                  context.functions.execute('log_message', 'ERROR', 'atlas_api', ret);
+                }
+                else
+                {
+                  context.functions.execute('log_message', 'DEBUG', 'atlas_api', ret);
+                }
+                return ret;
               })
             .catch( error => {
                 context.functions.execute('log_message', 'ERROR', 'atlas_api', error);
