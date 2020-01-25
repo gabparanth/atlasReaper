@@ -1,9 +1,9 @@
  
 exports = function(url) 
 {
+  context.functions.execute('log_message', 'INFO', 'atlas_api', 'GET: ' + url);
+
   const http = context.services.get('http');
-  
-  const mongodb = context.services.get("MasterAtlas");
   
   return http
     .get({ url: url})
@@ -30,6 +30,9 @@ exports = function(url)
       return http.get({ url: url, headers: { 'Authorization': [ digestHeader ], "Content-Type": [ "application/json" ] } })
             .then(({ body }) => {
                 return JSON.parse(body.text());
-              });
+              })
+            .catch(function(error) {
+                context.functions.execute('log_message', 'ERROR', 'atlas_api', error);
+            });
     });
 };
