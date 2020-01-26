@@ -4,6 +4,6 @@
     "config": {
         "schedule": "0 21 * * *"
     },
-    "function_name": "theReaperArch",
-    "disabled": false
+    "function_name": "theReaper",
+    "disabled": true
 }

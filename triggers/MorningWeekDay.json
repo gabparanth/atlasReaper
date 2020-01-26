@@ -5,5 +5,5 @@
         "schedule": "0 7 * * MON-FRI"
     },
     "function_name": "theSeeder",
-    "disabled": false
+    "disabled": true
 }
