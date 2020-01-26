@@ -1,5 +1,5 @@
 {
-    "name": "atlas_api_get_clusters_for_project_id",
+    "name": "atlas_api_get_users_for_project_id",
     "private": false,
     "run_as_system": true
 }
