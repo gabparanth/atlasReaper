@@ -1,7 +1,7 @@
  
 exports = function(url, func_name) 
 {
-  context.functions.execute('log_message', 'INFO', 'atlas_api', func_name);
+  context.functions.execute('log_message', 'INFO', 'atlas_api', func_name, url);
 
   const http = context.services.get('http');
   
