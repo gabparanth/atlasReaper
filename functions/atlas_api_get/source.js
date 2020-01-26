@@ -44,7 +44,7 @@ exports = function(url, func_name)
                 }
                 else
                 {
-                  context.functions.execute('log_message', 'DEBUG', 'atlas_api', func_name, ret, tag);
+                  context.functions.execute('log_message', 'INFO', 'atlas_api', func_name, ret, tag);
                 }
                 return ret;
               })
