@@ -7,7 +7,7 @@ exports = function(org_id)
     var snapshot = {};
     snapshot.ts = new Date(Date.now());
 
-    clusterSnapshotsCollection.insertOne(snapshot).then(result => {
+    return clusterSnapshotsCollection.insertOne(snapshot).then(result => {
 
       const snapshot_id = result.insertedId;
       context.functions.execute("atlas_api_get_projects_for_org_id", org_id).then(resp => {
@@ -35,6 +35,7 @@ exports = function(org_id)
           });
         });
       });
+      return snapshot_id;
     });
 }
       
