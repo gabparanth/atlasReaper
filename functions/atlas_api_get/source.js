@@ -1,7 +1,14 @@
- 
+function uuidv4() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+} 
+
 exports = function(url, func_name) 
 {
-  context.functions.execute('log_message', 'INFO', 'atlas_api', func_name, url);
+  tag = uuidv4()
+  context.functions.execute('log_message', 'INFO', 'atlas_api', func_name, url, tag);
 
   const http = context.services.get('http');
   
@@ -33,16 +40,16 @@ exports = function(url, func_name)
                 ret = EJSON.parse(http_response.body.text());
                 if ('error' in ret)
                 {
-                  context.functions.execute('log_message', 'ERROR', 'atlas_api', func_name, ret);
+                  context.functions.execute('log_message', 'ERROR', 'atlas_api', func_name, ret, tag);
                 }
                 else
                 {
-                  context.functions.execute('log_message', 'DEBUG', 'atlas_api', func_name, ret);
+                  context.functions.execute('log_message', 'DEBUG', 'atlas_api', func_name, ret, tag);
                 }
                 return ret;
               })
             .catch( error => {
-                context.functions.execute('log_message', 'ERROR', 'atlas_api', func_name, error);
+                context.functions.execute('log_message', 'ERROR', 'atlas_api', func_name, error, tag);
             });
     });
 };
