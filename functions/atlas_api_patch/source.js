@@ -27,7 +27,7 @@ exports = function(url, body)
 
       const digestHeader = `Digest username="${username}", realm="${realm}", nonce="${nonce}", uri="${path}", qop=${qop}, nc=${nc}, cnonce="${cnonce}", response="${response}", algorithm=MD5`;
 
-      return http.get({ url: url, body: body, encodeBodyAsJSON : true, headers: { 'Authorization': [ digestHeader ], "Content-Type": [ "application/json" ] } })
+      return http.patch({ url: url, body: body, encodeBodyAsJSON : true, headers: { 'Authorization': [ digestHeader ], "Content-Type": [ "application/json" ] } })
             .then( http_response => {
               
                 ret = EJSON.parse(http_response.body.text());
