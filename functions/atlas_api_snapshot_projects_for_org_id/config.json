@@ -1,5 +1,5 @@
 {
-    "name": "updateClustersCollection",
+    "name": "atlas_api_snapshot_projects_for_org_id",
     "private": false,
     "run_as_system": true
 }
