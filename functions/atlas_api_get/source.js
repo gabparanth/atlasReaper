@@ -33,16 +33,16 @@ exports = function(url, func_name)
                 ret = EJSON.parse(http_response.body.text());
                 if ('error' in ret)
                 {
-                  context.functions.execute('log_message', 'ERROR', 'atlas_api', ret);
+                  context.functions.execute('log_message', 'ERROR', 'atlas_api', func_name, ret);
                 }
                 else
                 {
-                  context.functions.execute('log_message', 'DEBUG', 'atlas_api', ret);
+                  context.functions.execute('log_message', 'DEBUG', 'atlas_api', func_name, ret);
                 }
                 return ret;
               })
             .catch( error => {
-                context.functions.execute('log_message', 'ERROR', 'atlas_api', error);
+                context.functions.execute('log_message', 'ERROR', 'atlas_api', func_name, error);
             });
     });
 };
