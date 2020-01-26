@@ -1,5 +1,5 @@
 {
-    "name": "pauseBiConnector",
+    "name": "atlas_api_pause_bi_connector",
     "private": false,
     "run_as_system": true
 }

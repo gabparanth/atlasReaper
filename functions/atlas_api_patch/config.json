@@ -1,5 +1,5 @@
 {
-    "name": "get_atlas_clusters_for_project_id",
+    "name": "atlas_api_patch",
     "private": false,
     "run_as_system": true
 }

@@ -1,14 +1,16 @@
+ 
+exports = function(url, body) 
+{
+  context.functions.execute('log_message', 'INFO', 'atlas_api', 'GET: ' + url);
 
-exports = function() {
   const http = context.services.get('http');
-  url = "https://cloud.mongodb.com/api/atlas/v1.0/orgs/5aaf9d04df9db13ed52993e5/groups";
+  
   return http
     .get({ url: url})
     .then(resp => {
       const username = context.values.get('AtlasPublicKey');
       const apiKey = context.values.get('AtlasPrivateKey');
       const authHeader = resp.headers['Www-Authenticate'].toString();
-
       const realm = authHeader.match(/realm="(.*?)"/)[1];
       const nonce = authHeader.match(/nonce="(.*?)"/)[1];
       const qop = authHeader.match(/qop="(.*?)"/)[1];
@@ -25,10 +27,22 @@ exports = function() {
 
       const digestHeader = `Digest username="${username}", realm="${realm}", nonce="${nonce}", uri="${path}", qop=${qop}, nc=${nc}, cnonce="${cnonce}", response="${response}", algorithm=MD5`;
 
-      return http.get({ url: url, headers: { 'Authorization': [ digestHeader ], "Content-Type": [ "application/json" ] } })
-            .then(({body}) => {
-
-              return JSON.parse(body.text()).results;
+      return http.get({ url: url, body: body, encodeBodyAsJSON : true, headers: { 'Authorization': [ digestHeader ], "Content-Type": [ "application/json" ] } })
+            .then( http_response => {
+              
+                ret = EJSON.parse(http_response.body.text());
+                if ('error' in ret)
+                {
+                  context.functions.execute('log_message', 'ERROR', 'atlas_api', ret);
+                }
+                else
+                {
+                  context.functions.execute('log_message', 'DEBUG', 'atlas_api', ret);
+                }
+                return ret;
+              })
+            .catch( error => {
+                context.functions.execute('log_message', 'ERROR', 'atlas_api', error);
             });
     });
 };

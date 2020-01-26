@@ -1,5 +1,5 @@
 {
-    "name": "pauseCluster",
+    "name": "atlas_api_get_projects_for_org_id",
     "private": false,
     "run_as_system": true
 }

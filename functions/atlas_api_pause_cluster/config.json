@@ -1,5 +1,5 @@
 {
-    "name": "resumeCluster",
+    "name": "atlas_api_pause_cluster",
     "private": false,
     "run_as_system": true
 }
