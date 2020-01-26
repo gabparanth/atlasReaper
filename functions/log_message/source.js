@@ -13,9 +13,9 @@ exports = function(level, logger, func_name, message, tag)
                     "func_name" : func_name,
                     "message": message };
                     
-  if (tag != null)
+  if (tag !== null)
   {
-    logObject["tag"] = tag;
+    logObject.tag = tag;
   }
                     
   return logCollection.insertOne(logObject);
