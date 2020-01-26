@@ -6,7 +6,7 @@ exports = function(url, body)
   const http = context.services.get('http');
   
   return http
-    .get({ url: url})
+    .patch({ url: url})
     .then(resp => {
       const username = context.values.get('AtlasPublicKey');
       const apiKey = context.values.get('AtlasPrivateKey');
@@ -19,7 +19,7 @@ exports = function(url, body)
 
       const path = url.match(/:\/\/.*?(\/.*)/)[1];
 
-      const ha2 = utils.crypto.hash('md5', `GET:${path}`).toHex();
+      const ha2 = utils.crypto.hash('md5', `PATCH:${path}`).toHex();
       const cnonce = Math.random().toString().substr(2, 14);
       const nc = '00000001';
   
