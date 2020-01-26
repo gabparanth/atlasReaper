@@ -1,16 +1,22 @@
 // type : error or success
 
-exports = function(level, logger, message, tag)
+exports = function(level, logger, func_name, message, tag)
 {
   const mongodb = context.services.get("MasterAtlas");
   const logCollection = mongodb.db("atlas").collection("log");
   
-  var date = new Date(Date.now());
+  var ts = new Date(Date.now());
   
   var logObject = { "level" : level,
-                    "date": date, 
+                    "ts": ts, 
                     "logger" : logger,
-                    "message": message,
-                    "tag" : tag };
+                    "func_name" : func_name,
+                    "message": message };
+                    
+  if (tag != null)
+  {
+    logObject["tag"] = tag;
+  }
+                    
   return logCollection.insertOne(logObject);
 };
