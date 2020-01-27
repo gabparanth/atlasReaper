@@ -53,47 +53,10 @@ exports = function(org_id)
                   }
                 });
               });
-              });
-        });
-      });
+            });
+          });
         });
       });
       return snapshot_id;
     });
 }
-      
-      
-//       .then(() => {
-        
-//         context.functions.execute("getUsers", project.id).then(users => {
-//           users.forEach(user => {
-            
-//             user.roles.forEach(role => {
-              
-//               if ((role.groupId == project.id) && (role.roleName == "GROUP_OWNER") ) {
-        
-//                 var userDoc = {"userId":user.id, "firstName": user.firstName, "lastName" : user.lastName, "emailAddress" : user.emailAddress };
-                
-//                 clustersCollection.updateMany({"project.id": project.id}, { $addToSet : {"users": userDoc}});
-//                 // console.log(project.id+ "  " + userDoc );
-//               }
-//             });
-//           });
-//         });
-//       });
-//     });
-//   }).then(() => {
-//       clustersCollection.find({"updated":{"$exists": false}}, {_id: 1}).toArray().then(ids =>{
-//         ids.forEach(id => {
-//           try {
-//           clustersCollection.deleteOne(id);
-//           } catch (e){
-//             console.log(e);
-//           }
-//         });
-//       })
-//       .then(() =>{
-//         clustersCollection.updateMany({},{$unset : { updated :  1 }});  
-//       });
-//     });
-// };
