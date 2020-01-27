@@ -12,8 +12,8 @@ function get_agg_pipeline(snapshot_id)
           '$push': {
             'cluster_name': '$configuration.name', 
             'project_name': '$project.name', 
-            'paused' : '$paused',
-            'biConnector' : '$biConnector',
+            'paused' : '$configuration.paused',
+            'biConnector' : '$configuration.biConnector',
             'summary': {
               '$concat': [
                 {
