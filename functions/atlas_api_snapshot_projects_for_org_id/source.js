@@ -2,12 +2,13 @@
 exports = function(org_id) 
 {
     const mongodb = context.services.get("MasterAtlas");
-    const clusterSnapshotsCollection = mongodb.db("atlas").collection("cluster_snapshot");
+    const clusterSnapshots = mongodb.db("atlas").collection("cluster_snapshot");
+    const clusterSnapshotsDetails = mongodb.db("atlas").collection("cluster_snapshot_details");
 
     var snapshot = {};
     snapshot.ts = new Date(Date.now());
 
-    return clusterSnapshotsCollection.insertOne(snapshot).then(result => {
+    return clusterSnapshots.insertOne(snapshot).then(result => {
 
       const snapshot_id = result.insertedId;
       context.functions.execute("atlas_api_get_projects_for_org_id", org_id).then(resp => {
@@ -18,13 +19,17 @@ exports = function(org_id)
             clusters.forEach(cluster => {
               
               var clusterDoc = {
+                          "snapshot_id" : snapshot_id,
                           "cluster_id": cluster.id,
                           "name" : cluster.name,
-                          "project":{ "id": project.id,
-                          "name": project.name },
+                          "project":
+                          { 
+                            "id": project.id,
+                            "name": project.name 
+                          },
                           "configuration" : cluster};
 
-              clusterSnapshotsCollection.updateOne({"_id": snapshot_id}, { $push : { 'clusters' : clusterDoc } }).then(result => {
+                clusterSnapshotsDetails.insertOne(clusterDoc).then(result => {
                 const { matchedCount, modifiedCount } = result;
                 if( matchedCount && modifiedCount ) {
                   context.functions.execute('log_message', 'INFO', 'atlas_api', 'atlas_api_snapshot_projects_for_org_id', cluster.name, snapshot_id);
@@ -32,7 +37,25 @@ exports = function(org_id)
                   context.functions.execute('log_message', 'ERROR', 'atlas_api', 'atlas_api_snapshot_projects_for_org_id', err, snapshot_id);
                 })
             });
-          });
+
+            context.functions.execute("atlas_api_get_users_for_project_id", project.id).then(resp => {
+              users = resp.result;
+              users.forEach(user => {
+                
+                user.roles.forEach(role => {
+                  
+                  if ((role.groupId == project.id) && (role.roleName == "GROUP_OWNER") ) {
+            
+                    var userDoc = {"userId":user.id, "firstName": user.firstName, "lastName" : user.lastName, "emailAddress" : user.emailAddress };
+                    
+                    clusterSnapshotsCollection.updateMany({"project.id": project.id}, { $addToSet : {"users": userDoc}});
+                    // console.log(project.id+ "  " + userDoc );
+                  }
+                });
+              });
+              });
+        });
+      });
         });
       });
       return snapshot_id;
