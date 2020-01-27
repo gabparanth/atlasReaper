@@ -1,3 +1,42 @@
+function get_agg_pipeline(snapshot_id)
+{
+  var pipeline = [
+    {
+      '$match' : {
+        'snapshot_id' : snapshot_id
+      }
+    }, {
+      '$group': {
+        '_id': '$snapshot_id', 
+        'clusters': {
+          '$push': {
+            'cluster_name': '$configuration.name', 
+            'project_name': '$project.name', 
+            'summary': {
+              '$concat': [
+                {
+                  '$toString': '$configuration.numShards'
+                }, 'x', '$configuration.providerSettings.instanceSizeName', ' - ', '$configuration.providerSettings.providerName'
+              ]
+            }, 
+            'details': {
+              'cluster_id': '$cluster_id', 
+              'project_id': '$project.id'
+            }, 
+            'users': '$users'
+          }
+        }
+      }
+    }, {
+      '$merge': {
+        'into': 'cluster_snapshot', 
+        'whenMatched': 'replace'
+      }
+    }
+  ];
+
+  return pipeline;
+}
 
 exports = function(org_id) 
 {
@@ -52,6 +91,13 @@ exports = function(org_id)
             });
           });
         });
-      return snapshot_id;
+
+        return clusterSnapshotsDetails.aggregate(pipeline).then(doc => {
+          context.functions.execute('log_message', 'INFO', 'atlas_api', 'atlas_api_snapshot_projects_for_org_id', 'Created Snapshot', snapshot_id);
+          return snapshot_id;
+        }).catch( err => {
+          context.functions.execute('log_message', 'ERROR', 'atlas_api', 'atlas_api_snapshot_projects_for_org_id', err, snapshot_id);
+          return null;
+        })
     });
 }
