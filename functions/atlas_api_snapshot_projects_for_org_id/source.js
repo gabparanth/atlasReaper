@@ -38,9 +38,9 @@ function get_agg_pipeline(snapshot_id)
   return pipeline;
 }
 
-async function insert_project_details(project_id, clusterSnapshotsDetails)
+async function insert_project_details(snapshot_id, project, clusterSnapshotsDetails)
 {
-    const resp = await context.functions.execute("atlas_api_get_clusters_for_project_id", project_id);
+    const resp = await context.functions.execute("atlas_api_get_clusters_for_project_id", project.id);
     for ( var i = 0; i < resp.results.length; i++ )
     {
       const cluster = resp.results[i];
@@ -59,13 +59,13 @@ async function insert_project_details(project_id, clusterSnapshotsDetails)
     };
 }
 
-async function insert_project_users(project_id, clusterSnapshotsDetails)
+async function insert_project_users(snapshot_id, project, clusterSnapshotsDetails)
 {
-  const resp = context.functions.execute("atlas_api_get_users_for_project_id", project_id);
+  const resp = await context.functions.execute("atlas_api_get_users_for_project_id", project.id);
   for ( var i = 0; i < resp.results.length; i++ )
   {
     const user = resp.results[i];
-    for ( var j = 0; j < user.roles.length; i++ )
+    for ( var j = 0; j < user.roles.length; j++ )
     {
       const role = user.roles[j];
       if ((role.groupId == project.id) && (role.roleName == "GROUP_OWNER") ) 
@@ -80,7 +80,6 @@ async function insert_project_users(project_id, clusterSnapshotsDetails)
 exports = async function(org_id) 
 {
     const mongodb = context.services.get("MasterAtlas");
-    const clusterSnapshots = mongodb.db("atlas").collection("cluster_snapshot");
     const clusterSnapshotsDetails = mongodb.db("atlas").collection("cluster_snapshot_details");
 
     const snapshot_ts = new Date(Date.now());
@@ -90,8 +89,8 @@ exports = async function(org_id)
     for ( var i = 0; i < resp.results.length; i++ )
     { 
       const project = resp.results[i];
-      await insert_project_details(project.id, clusterSnapshotsDetails);
-      await insert_project_users(project.id, clusterSnapshotsDetails);
+      await insert_project_details(snapshot_id, project, clusterSnapshotsDetails);
+      await insert_project_users(snapshot_id, project, clusterSnapshotsDetails);
     }
 
     const pipeline = get_agg_pipeline(snapshot_id);
