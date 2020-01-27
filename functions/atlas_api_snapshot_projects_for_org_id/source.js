@@ -48,7 +48,7 @@ exports = function(org_id)
             
                     var userDoc = {"userId":user.id, "firstName": user.firstName, "lastName" : user.lastName, "emailAddress" : user.emailAddress };
                     
-                    clusterSnapshotsCollection.updateMany({"project.id": project.id}, { $addToSet : {"users": userDoc}});
+                    clusterSnapshotsDetails.updateMany({"project.id": project.id}, { $addToSet : {"users": userDoc}});
                     // console.log(project.id+ "  " + userDoc );
                   }
                 });
