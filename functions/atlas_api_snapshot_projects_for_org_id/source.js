@@ -5,13 +5,10 @@ exports = function(org_id)
     const clusterSnapshots = mongodb.db("atlas").collection("cluster_snapshot");
     const clusterSnapshotsDetails = mongodb.db("atlas").collection("cluster_snapshot_details");
 
-    var snapshot = {};
-    snapshot.ts = new Date(Date.now());
-    snapshot.snapshot_id = snapshot.ts.toISOString();
+    const snapshot_ts = new Date(Date.now());
+    const snapshot_id = snapshot_ts.toISOString();
 
-    return clusterSnapshots.insertOne(snapshot).then(result => {
-
-      context.functions.execute("atlas_api_get_projects_for_org_id", org_id).then(resp => {
+    return context.functions.execute("atlas_api_get_projects_for_org_id", org_id).then(resp => {
         var projects = resp.results;
         projects.forEach(project => { 
           context.functions.execute("atlas_api_get_clusters_for_project_id", project.id).then(resp => {
@@ -19,7 +16,7 @@ exports = function(org_id)
             clusters.forEach(cluster => {
               
               var clusterDoc = {
-                          "snapshot_id" : snapshot.snapshot_id,
+                          "snapshot_id" : snapshot_id,
                           "cluster_id": cluster.id,
                           "name" : cluster.name,
                           "project":
@@ -48,15 +45,13 @@ exports = function(org_id)
             
                     var userDoc = {"userId":user.id, "firstName": user.firstName, "lastName" : user.lastName, "emailAddress" : user.emailAddress };
                     
-                    clusterSnapshotsDetails.updateMany({"snapshot_id" : snapshot.snapshot_id, "project.id": project.id}, { $addToSet : {"users": userDoc}});
-                    // console.log(project.id+ "  " + userDoc );
+                    clusterSnapshotsDetails.updateMany({"snapshot_id" : snapshot_id, "project.id": project.id}, { $addToSet : {"users": userDoc}});
                   }
                 });
               });
             });
           });
         });
-      });
-      return snapshot.snapshot_id;
+      return snapshot_id;
     });
 }
