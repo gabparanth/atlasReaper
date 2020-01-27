@@ -47,7 +47,7 @@ exports = function(org_id)
     const snapshot_ts = new Date(Date.now());
     const snapshot_id = snapshot_ts.toISOString();
 
-    return context.functions.execute("atlas_api_get_projects_for_org_id", org_id).then(resp => {
+    context.functions.execute("atlas_api_get_projects_for_org_id", org_id).then(resp => {
         var projects = resp.results;
         projects.forEach(project => { 
           context.functions.execute("atlas_api_get_clusters_for_project_id", project.id).then(resp => {
@@ -93,12 +93,12 @@ exports = function(org_id)
         });
 
         const pipeline = get_agg_pipeline(snapshot_id);
-        return clusterSnapshotsDetails.aggregate(pipeline).then(doc => {
+        clusterSnapshotsDetails.aggregate(pipeline).then(doc => {
           context.functions.execute('log_message', 'INFO', 'atlas_api', 'atlas_api_snapshot_projects_for_org_id', 'Created Snapshot', snapshot_id);
           return snapshot_id;
         }).catch( err => {
           context.functions.execute('log_message', 'ERROR', 'atlas_api', 'atlas_api_snapshot_projects_for_org_id', err, snapshot_id);
           return null;
-        })
+        });
     });
 }
