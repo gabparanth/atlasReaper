@@ -7,10 +7,10 @@ exports = function(org_id)
 
     var snapshot = {};
     snapshot.ts = new Date(Date.now());
+    snapshot.snapshot_id = snapshot.ts.toISOString();
 
     return clusterSnapshots.insertOne(snapshot).then(result => {
 
-      const snapshot_id = result.insertedId;
       context.functions.execute("atlas_api_get_projects_for_org_id", org_id).then(resp => {
         var projects = resp.results;
         projects.forEach(project => { 
@@ -19,7 +19,7 @@ exports = function(org_id)
             clusters.forEach(cluster => {
               
               var clusterDoc = {
-                          "snapshot_id" : snapshot_id,
+                          "snapshot_id" : snapshot.snapshot_id,
                           "cluster_id": cluster.id,
                           "name" : cluster.name,
                           "project":
@@ -48,7 +48,7 @@ exports = function(org_id)
             
                     var userDoc = {"userId":user.id, "firstName": user.firstName, "lastName" : user.lastName, "emailAddress" : user.emailAddress };
                     
-                    clusterSnapshotsDetails.updateMany({"project.id": project.id}, { $addToSet : {"users": userDoc}});
+                    clusterSnapshotsDetails.updateMany({"snapshot_id" : snapshot.snapshot_id, "project.id": project.id}, { $addToSet : {"users": userDoc}});
                     // console.log(project.id+ "  " + userDoc );
                   }
                 });
@@ -57,6 +57,6 @@ exports = function(org_id)
           });
         });
       });
-      return snapshot_id;
+      return snapshot.snapshot_id;
     });
 }
