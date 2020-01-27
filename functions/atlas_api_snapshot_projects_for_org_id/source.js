@@ -41,8 +41,9 @@ function get_agg_pipeline(snapshot_id)
 async function insert_project_details(project_id, clusterSnapshotsDetails)
 {
     const resp = await context.functions.execute("atlas_api_get_clusters_for_project_id", project_id);
-    for ( const cluster in resp.results ) 
+    for ( var i = 0; i < resp.results.length; i++ )
     {
+      const cluster = resp.results[i];
       var clusterDoc = {
                   "snapshot_id" : snapshot_id,
                   "cluster_id": cluster.id,
@@ -61,10 +62,12 @@ async function insert_project_details(project_id, clusterSnapshotsDetails)
 async function insert_project_users(project_id, clusterSnapshotsDetails)
 {
   const resp = context.functions.execute("atlas_api_get_users_for_project_id", project_id);
-  for ( const user in resp.results )
+  for ( var i = 0; i < resp.results.length; i++ )
   {
-    for ( const role in user.roles)
+    const user = resp.results[i];
+    for ( var j = 0; j < user.roles.length; i++ )
     {
+      const role = user.roles[j];
       if ((role.groupId == project.id) && (role.roleName == "GROUP_OWNER") ) 
       {
         var userDoc = { "userId" : user.id, "firstName" : user.firstName, "lastName" : user.lastName, "emailAddress" : user.emailAddress };
@@ -84,10 +87,11 @@ exports = async function(org_id)
     const snapshot_id = snapshot_ts.toISOString();
 
     const resp = await context.functions.execute("atlas_api_get_projects_for_org_id", org_id);
-    for ( const project in resp.results)
+    for ( var i = 0; i < resp.results.length; i++ )
     { 
-        await insert_project_details(project.id, clusterSnapshotsDetails);
-        await insert_project_users(project.id, clusterSnapshotsDetails);
+      const project = resp.results[i];
+      await insert_project_details(project.id, clusterSnapshotsDetails);
+      await insert_project_users(project.id, clusterSnapshotsDetails);
     }
 
     const pipeline = get_agg_pipeline(snapshot_id);
