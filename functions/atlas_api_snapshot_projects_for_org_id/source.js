@@ -39,7 +39,7 @@ exports = function(org_id)
             });
 
             context.functions.execute("atlas_api_get_users_for_project_id", project.id).then(resp => {
-              users = resp.result;
+              users = resp.results;
               users.forEach(user => {
                 
                 user.roles.forEach(role => {
