@@ -93,7 +93,7 @@ exports = function(org_id)
         });
 
         const pipeline = get_agg_pipeline(snapshot_id);
-        clusterSnapshotsDetails.aggregate(pipeline).then(doc => {
+        clusterSnapshotsDetails.aggregate(pipeline).toArray().then(res => {
           context.functions.execute('log_message', 'INFO', 'atlas_api', 'atlas_api_snapshot_projects_for_org_id', 'Created Snapshot', snapshot_id);
           return snapshot_id;
         }).catch( err => {
