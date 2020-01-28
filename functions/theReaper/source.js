@@ -9,10 +9,9 @@ exports = async function()
     'paused': false, 
     'instanceSizeName': { '$ne': 'M0' },
      'whitelistingPolicy' : { '$in' : [ 'ANYTIME', 'PAUSED', 'OFFICE_HOURS' ] }
-  }
+  };
 
-  var resp = clustersCollection.find(filter); 
-  var clusters = resp.results;
+  var clusters = await clustersCollection.find({}).toArray(); 
 
   for ( var i = 0; i < clusters.length; i++ )
   {
@@ -21,26 +20,26 @@ exports = async function()
     // Pause BI Connector if necessary
     if ( cluster.whitelistingPolicy == 'ANYTIME' && cluster.biConnector.enabled )
     {
-      const task = { 'snapshot_id' : cluster.lastSnaphot, 
-               'project_id' : cluster.details.project_id,
-               'project_name' : cluster.project_name,
-               'cluster_name' : cluster.cluster_name,
-               'type' : 'PAUSE_BI_CONNECTOR',
-               'status' : 'PENDING' 
-              }
+      const task = { 'snapshot_id' : cluster.lastSnapshot, 
+              'project_name' : cluster.project_name,
+              'cluster_name' : cluster.cluster_name,
+              'details' : cluster.details,
+              'type' : 'PAUSE_BI_CONNECTOR',
+              'status' : 'PENDING' 
+              };
         await tasksCollection.insertOne(task);
     }
 
     // Pause Cluster
     if ( cluster.whitelistingPolicy == 'PAUSED' )
     {
-      const task = { 'snapshot_id' : cluster.lastSnaphot, 
-               'project_id' : cluster.details.project_id,
-               'project_name' : cluster.project_name,
-               'cluster_name' : cluster.cluster_name,
-               'type' : 'PAUSE_CLUSTER',
-               'status' : 'PENDING' 
-              }
+      const task = { 'snapshot_id' : cluster.lastSnapshot, 
+              'project_name' : cluster.project_name,
+              'cluster_name' : cluster.cluster_name,
+              'details' : cluster.details,
+              'type' : 'PAUSE_CLUSTER',
+              'status' : 'PENDING' 
+              };
         await tasksCollection.insertOne(task);
     }
   }
