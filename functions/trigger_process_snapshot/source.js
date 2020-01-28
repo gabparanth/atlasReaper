@@ -23,6 +23,7 @@ exports = async function(changeEvent)
         }
         else
         {
+            snapshot_cluster.whitelistingPolicy = 'ANYTIME';
             await active_clusters.insertOne(snapshot_cluster);
             insertedClusters = insertedClusters + 1;
         }

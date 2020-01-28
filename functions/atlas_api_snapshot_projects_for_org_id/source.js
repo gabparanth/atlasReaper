@@ -12,6 +12,8 @@ function get_agg_pipeline(snapshot_id)
           '$push': {
             'cluster_name': '$configuration.name', 
             'project_name': '$project.name', 
+            'instanceSizeName' : '$configuration.providerSettings.instanceSizeName',
+            'numShards' : '$configuration.numShards',
             'paused' : '$configuration.paused',
             'biConnector' : '$configuration.biConnector',
             'summary': {
