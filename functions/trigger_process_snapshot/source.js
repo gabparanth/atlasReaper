@@ -19,6 +19,7 @@ exports = async function(changeEvent)
         active_cluster = await active_clusters.findOne({'details.cluster_id' : snapshot_cluster.details.cluster_id})
         if ( active_cluster )
         {
+            snapshot_cluster.whitelistingPolicy = active_cluster.whitelistingPolicy;
             await active_clusters.updateOne({'details.cluster_id' : snapshot_cluster.details.cluster_id}, snapshot_cluster);
         }
         else
