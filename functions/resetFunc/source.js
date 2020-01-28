@@ -4,6 +4,7 @@
     which contains four keys: 'token', 'tokenId', 'username', and 'password', and additional parameters
     for each parameter passed in as part of the argument list from the SDK.
 
+    
     The return object must contain a 'status' key which can be empty or one of three string values: 
       'success', 'pending', or 'fail'
 
