@@ -25,7 +25,7 @@ function get_agg_pipeline(snapshot_id)
                 'x', 
                 '$configuration.providerSettings.instanceSizeName', 
                 ' - ', 
-                '$configuration.providerSettings.providerName'
+                '$configuration.providerSettings.backingProviderName'
               ]
             }, 
             'details': {
