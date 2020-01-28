@@ -11,7 +11,7 @@ exports = async function()
      'whitelistingPolicy' : { '$in' : [ 'ANYTIME', 'PAUSED', 'OFFICE_HOURS' ] }
   };
 
-  var clusters = await clustersCollection.find({}).toArray(); 
+  var clusters = await clustersCollection.find(filter).toArray(); 
 
   for ( var i = 0; i < clusters.length; i++ )
   {
