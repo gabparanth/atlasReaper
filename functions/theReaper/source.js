@@ -10,7 +10,7 @@ exports = async function()
     'instanceSizeName': { '$ne': 'M0' },
      'whitelistingPolicy' : { '$in' : [ 'ANYTIME', 'PAUSED', 'OFFICE_HOURS' ] }
   };
-
+ 
   var clusters = await clustersCollection.find(filter).toArray(); 
 
   for ( var i = 0; i < clusters.length; i++ )
