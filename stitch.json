@@ -1,6 +1,7 @@
 {
     "app_id": "atlasreaper-pmpzl",
     "config_version": 20180301,
+    "name": "AtlasReaper",
     "location": "IE",
     "deployment_model": "LOCAL",
     "security": {},
