@@ -1,26 +1,46 @@
-// The reaper will filter cluster not M0,whitelistingPolicy:{$ne:"anytime"} , and configuration.paused : false 
+exports = async function()
+{
+  const mongodb = context.services.get("MasterAtlas");
+  const clustersCollection = mongodb.db("atlas").collection("active_clusters");
+  const tasksCollection = mongodb.db("atlas").collection("tasks");
 
-exports = function(){
- const mongodb = context.services.get("MasterAtlas");
-  const clustersCollection = mongodb.db("atlas").collection("clusters");
-  
-  // update cluster collection
-  context.functions.execute('updateClustersCollection').then(() => {
-    
-    // disable BI Connector 
-    clustersCollection.find({"configuration.biConnector.enabled":true}, {'project.id': 1, name : 1}).toArray().then(docs => {
-      for (var i in docs){
-        context.functions.execute('pauseBiConnector', doc[i].project.id, doc[i].name);
-      }
-    }).then(() => {
-    
-    // Pause Clusters
-    clustersCollection.find({whitelistingPolicy:{$ne:"anytime"}, 'configuration.paused':false, "configuration.providerSettings.instanceSizeName" : { $ne : "M0" }}, {'project.id': 1, name : 1}).toArray().then(doc => {
-      for (var i in doc){
-          console.log(JSON.stringify(doc[i]._id));
-          context.functions.execute('pauseCluster', doc[i].project.id,  doc[i].name );
-      }
-    });
-    });
-  });
+  // Get all non paused, non M0 clusters that are set to be reaped
+  var filter = {
+    'paused': false, 
+    'instanceSizeName': { '$ne': 'M0' },
+     'whitelistingPolicy' : { '$in' : [ 'ANYTIME', 'PAUSED', 'OFFICE_HOURS' ] }
+  };
+
+  var clusters = await clustersCollection.find(filter).toArray(); 
+
+  for ( var i = 0; i < clusters.length; i++ )
+  {
+    const cluster = clusters[i];
+
+    // Pause BI Connector if necessary
+    if ( cluster.whitelistingPolicy == 'ANYTIME' && cluster.biConnector.enabled )
+    {
+      const task = { 'snapshot_id' : cluster.lastSnapshot, 
+              'project_name' : cluster.project_name,
+              'cluster_name' : cluster.cluster_name,
+              'details' : cluster.details,
+              'type' : 'PAUSE_BI_CONNECTOR',
+              'status' : 'PENDING' 
+              };
+        await tasksCollection.insertOne(task);
+    }
+
+    // Pause Cluster
+    if ( cluster.whitelistingPolicy == 'PAUSED' )
+    {
+      const task = { 'snapshot_id' : cluster.lastSnapshot, 
+              'project_name' : cluster.project_name,
+              'cluster_name' : cluster.cluster_name,
+              'details' : cluster.details,
+              'type' : 'PAUSE_CLUSTER',
+              'status' : 'PENDING' 
+              };
+        await tasksCollection.insertOne(task);
+    }
+  }
 };

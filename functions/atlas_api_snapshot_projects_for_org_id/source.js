@@ -14,13 +14,18 @@ function get_agg_pipeline(snapshot_id)
             'project_name': '$project.name', 
             'instanceSizeName' : '$configuration.providerSettings.instanceSizeName',
             'numShards' : '$configuration.numShards',
+            'replicationFactor' : '$configuration.replicationFactor',
             'paused' : '$configuration.paused',
             'biConnector' : '$configuration.biConnector',
             'summary': {
               '$concat': [
-                {
-                  '$toString': '$configuration.numShards'
-                }, 'x', '$configuration.providerSettings.instanceSizeName', ' - ', '$configuration.providerSettings.providerName'
+                { '$toString': '$configuration.numShards' }, 
+                'x', 
+                { '$toString': '$configuration.replicationFactor' }, 
+                'x', 
+                '$configuration.providerSettings.instanceSizeName', 
+                ' - ', 
+                '$configuration.providerSettings.providerName'
               ]
             }, 
             'details': {
