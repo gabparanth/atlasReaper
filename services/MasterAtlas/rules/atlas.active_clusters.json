@@ -1,7 +1,7 @@
 {
-    "id": "5e3040676bb901ae41d5cda6",
+    "id": "5e340467f7718b16d44523d2",
     "database": "atlas",
-    "collection": "clusters",
+    "collection": "active_clusters",
     "roles": [
         {
             "name": "default",
@@ -12,11 +12,5 @@
             "additional_fields": {}
         }
     ],
-    "schema": {
-        "properties": {
-            "_id": {
-                "bsonType": "string"
-            }
-        }
-    }
+    "schema": {}
 }

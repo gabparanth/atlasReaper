@@ -1,4 +1,5 @@
 {
+    "id": "5e3040676bb901ae41d5ce33",
     "name": "process_snapshot",
     "type": "DATABASE",
     "config": {
@@ -8,8 +9,7 @@
         "database": "atlas",
         "collection": "cluster_snapshot",
         "service_name": "MasterAtlas",
-        "match": {
-        },
+        "match": {},
         "full_document": true,
         "unordered": false
     },

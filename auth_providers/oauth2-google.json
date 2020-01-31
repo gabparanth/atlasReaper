@@ -1,0 +1,31 @@
+{
+    "id": "5e33ff3840e8f7583750333f",
+    "name": "oauth2-google",
+    "type": "oauth2-google",
+    "config": {
+        "clientId": "765924279419-3tnoiifu98pksmts3gasur716s2pie67.apps.googleusercontent.com"
+    },
+    "secret_config": {
+        "clientSecret": "GoogleOAuthClientSecret"
+    },
+    "disabled": false,
+    "metadata_fields": [
+        {
+            "required": false,
+            "name": "email"
+        },
+        {
+            "required": false,
+            "name": "name"
+        }
+    ],
+    "domain_restrictions": [
+        "mongodb.com",
+        "10gen.com"
+    ],
+    "redirect_uris": [
+        "https://atlasreaper-pmpzl.mongodbstitch.com/index.html",
+        "http://localhost:8080/index.html",
+        "https://stitch-statichosting-prod.s3.amazonaws.com/5e302c98756ccc6ca1b98ad4/index.html"
+    ]
+}
