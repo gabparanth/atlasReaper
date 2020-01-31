@@ -54,7 +54,7 @@ async function insert_project_details(snapshot_id, snapshot_ts, project, cluster
     {
       const cluster = resp.results[i];
       var clusterDoc = {
-                  "snapshot_id" : snapshot_id,,
+                  "snapshot_id" : snapshot_id,
                   "ts" : snapshot_ts,
                   "cluster_id": cluster.id,
                   "name" : cluster.name,
