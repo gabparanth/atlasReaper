@@ -9,4 +9,6 @@ Create the following Stitch Secrets
 * AtlasPublicKey
 * GoogleOAuthClientSecret
 
+# Do Stuff
+
 
