@@ -47,14 +47,15 @@ function get_agg_pipeline(snapshot_id)
   return pipeline;
 }
 
-async function insert_project_details(snapshot_id, project, clusterSnapshotsDetails)
+async function insert_project_details(snapshot_id, snapshot_ts, project, clusterSnapshotsDetails)
 {
     const resp = await context.functions.execute("atlas_api_get_clusters_for_project_id", project.id);
     for ( var i = 0; i < resp.results.length; i++ )
     {
       const cluster = resp.results[i];
       var clusterDoc = {
-                  "snapshot_id" : snapshot_id,
+                  "snapshot_id" : snapshot_id,,
+                  "ts" : snapshot_ts,
                   "cluster_id": cluster.id,
                   "name" : cluster.name,
                   "project":
@@ -98,7 +99,7 @@ exports = async function(org_id)
     for ( var i = 0; i < resp.results.length; i++ )
     { 
       const project = resp.results[i];
-      await insert_project_details(snapshot_id, project, clusterSnapshotsDetails);
+      await insert_project_details(snapshot_id, snapshot_ts, project, clusterSnapshotsDetails);
       await insert_project_users(snapshot_id, project, clusterSnapshotsDetails);
     }
 
