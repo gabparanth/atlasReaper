@@ -1,9 +1,7 @@
 {
-    "id": "5e3040676bb901ae41d5cda5",
     "name": "MasterAtlas",
     "type": "mongodb-atlas",
     "config": {
-        "clusterName": "AtlasReaper",
         "readPreference": "primary",
         "wireProtocolEnabled": true
     },

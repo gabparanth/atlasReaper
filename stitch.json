@@ -1,14 +1,6 @@
 {
-    "app_id": "atlasreaper-pmpzl",
     "config_version": 20180301,
-    "name": "AtlasReaper",
-    "location": "IE",
-    "deployment_model": "LOCAL",
     "security": {},
-    "hosting": {
-        "enabled": true,
-        "app_default_domain": "atlasreaper-pmpzl.mongodbstitch.com"
-    },
     "custom_user_data_config": {
         "enabled": false
     },

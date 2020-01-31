@@ -1,5 +1,4 @@
 {
-    "id": "5e34138001587679c1a40ef0",
     "name": "update_clusters_every_hour",
     "type": "SCHEDULED",
     "config": {
