@@ -13,6 +13,7 @@ exports = async function()
  
   var clusters = await clustersCollection.find(filter).toArray(); 
 
+  const task_ts = new Date(Date.now());
   for ( var i = 0; i < clusters.length; i++ )
   {
     const cluster = clusters[i];
@@ -20,7 +21,9 @@ exports = async function()
     // Pause BI Connector if necessary
     if ( cluster.whitelistingPolicy == 'ANYTIME' && cluster.biConnector.enabled )
     {
-      const task = { 'snapshot_id' : cluster.lastSnapshot, 
+      const task = { 
+              'last_updated' : task_ts,
+              'snapshot_id' : cluster.lastSnapshot, 
               'project_name' : cluster.project_name,
               'cluster_name' : cluster.cluster_name,
               'details' : cluster.details,
@@ -33,7 +36,9 @@ exports = async function()
     // Pause Cluster
     if ( cluster.whitelistingPolicy == 'PAUSED' )
     {
-      const task = { 'snapshot_id' : cluster.lastSnapshot, 
+      const task = { 
+              'last_updated' : task_ts,
+              'snapshot_id' : cluster.lastSnapshot, 
               'project_name' : cluster.project_name,
               'cluster_name' : cluster.cluster_name,
               'details' : cluster.details,
