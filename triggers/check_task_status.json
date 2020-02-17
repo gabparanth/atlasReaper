@@ -1,0 +1,9 @@
+{
+    "name": "check_task_status",
+    "type": "SCHEDULED",
+    "config": {
+        "schedule": "*/10 * * * *"
+    },
+    "function_name": "check_task_status",
+    "disabled": false
+}
