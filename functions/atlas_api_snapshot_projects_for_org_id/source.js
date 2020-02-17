@@ -17,6 +17,7 @@ function get_agg_pipeline(snapshot_id)
             'replicationFactor' : '$configuration.replicationFactor',
             'paused' : '$configuration.paused',
             'biConnector' : '$configuration.biConnector',
+            'stateName' : '$configuration.stateName',
             'summary': {
               '$concat': [
                 { '$toString': '$configuration.numShards' }, 

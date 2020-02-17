@@ -7,6 +7,7 @@ exports = async function()
   // Get all non paused, non M0 clusters that are set to be reaped
   var filter = {
     'paused': false, 
+    'stateName' : 'IDLE',
     'instanceSizeName': { '$ne': 'M0' },
      'whitelistingPolicy' : { '$in' : [ 'ANYTIME', 'PAUSED', 'OFFICE_HOURS' ] }
   };
