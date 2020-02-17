@@ -17,8 +17,7 @@ exports = async function(changeEvent)
         }
 
         // Update task
-        const tasks = mongodb.db('atlas').collection('tasks');
-        await tasks.updateOne( {'_id' : task['_id']} , { '$set' : { 'status' : 'IN_PROGRESS' }});
+        await context.functions.execute('update_task_status', task['_id'], task.last_updated, task.status, 'IN_PROGRESS');
         context.functions.execute('log_message', 'INFO', 'trigger', 'trigger_execute_task', `Paused cluster ${task.projectName}:${task.clusterName}`, task.snapshot_id);
     }
     else if ( task_type == 'PAUSE_BI_CONNECTOR' )
@@ -34,8 +33,7 @@ exports = async function(changeEvent)
         }
 
         // Update task
-        const tasks = mongodb.db('atlas').collection('tasks');
-        await tasks.updateOne( {'_id' : task['_id']} , { '$set' : { 'status' : 'IN_PROGRESS' }});
+        await context.functions.execute('update_task_status', task['_id'], task.last_updated, task.status, 'IN_PROGRESS');
         context.functions.execute('log_message', 'INFO', 'trigger', 'trigger_execute_task', `Paused bi connector for cluster ${task.projectName}:${task.clusterName}`, task.snapshot_id);
     }
     else
