@@ -1,0 +1,17 @@
+{
+    "name": "execute_task",
+    "type": "DATABASE",
+    "config": {
+        "operation_types": [
+            "INSERT"
+        ],
+        "database": "atlas",
+        "collection": "tasks",
+        "service_name": "MasterAtlas",
+        "match": {},
+        "full_document": true,
+        "unordered": false
+    },
+    "function_name": "trigger_execute_task",
+    "disabled": false
+}
