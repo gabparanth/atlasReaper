@@ -12,7 +12,6 @@ exports = async function()
    
     var tasks = await tasksCollection.find(filter).toArray(); 
 
-    const updated_ts = new Date(Date.now());
     for ( var i = 0; i < tasks.length; i++ )
     {
         const task = tasks[i];
@@ -23,7 +22,20 @@ exports = async function()
             {
                 if ( status.paused )
                 {
-                    await tasksCollection.updateOne( {'_id' : task['_id']} , { '$set' : { 'status' : 'DONE' }});
+                    const updated_ts = new Date(Date.now());
+                    await tasksCollection.updateOne( {'_id' : task['_id']} , { '$set' : { 'status' : 'DONE', 'last_updated' : updated_ts }});
+                }
+                else
+                {
+                    // TODO: Warn if it's been a while?
+                }
+            }
+            else if ( task.type == 'PAUSE_BI_CONNECTOR')
+            {
+                if ( !status.biConnector.enabled )
+                {
+                    const updated_ts = new Date(Date.now());
+                    await tasksCollection.updateOne( {'_id' : task['_id']} , { '$set' : { 'status' : 'DONE', 'last_updated' : updated_ts }});
                 }
                 else
                 {
@@ -34,7 +46,8 @@ exports = async function()
         else
         {
             // Cluster has gone, mark task completed
-            await tasksCollection.updateOne( {'_id' : task['_id']} , { '$set' : { 'status' : 'DONE' }});
+            const updated_ts = new Date(Date.now());
+            await tasksCollection.updateOne( {'_id' : task['_id']} , { '$set' : { 'status' : 'DONE', 'last_updated' : updated_ts }});
         }
     }
 };
