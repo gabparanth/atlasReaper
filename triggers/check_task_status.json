@@ -5,5 +5,5 @@
         "schedule": "*/10 * * * *"
     },
     "function_name": "trigger_check_task_status",
-    "disabled": true
+    "disabled": false
 }
