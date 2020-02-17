@@ -37,19 +37,17 @@ exports = function(url, body, func_name)
       return http.patch({ url: url, body: body, encodeBodyAsJSON : true, headers: { 'Authorization': [ digestHeader ], "Content-Type": [ "application/json" ] } })
             .then( http_response => {
               
-                ret = EJSON.parse(http_response.body.text());
-                if ('error' in ret)
-                {
-                  context.functions.execute('log_message', 'ERROR', 'atlas_api', func_name, ret, tag);
-                }
-                else
-                {
-                  context.functions.execute('log_message', 'INFO', 'atlas_api', func_name, ret, tag);
-                }
-                return ret;
-              })
-            .catch( error => {
-                context.functions.execute('log_message', 'ERROR', 'atlas_api', func_name, error, tag);
+              ret = EJSON.parse(http_response.body.text());
+              if ('error' in ret)
+              {
+                context.functions.execute('log_message', 'ERROR', 'atlas_api', func_name, ret, tag);
+                throw `${func_name} : ${ret.detail}`
+              }
+              return ret;
+            })
+          .catch( error => {
+              context.functions.execute('log_message', 'ERROR', 'atlas_api', func_name, error, tag);
+              throw `${func_name} : ${error}`
             });
-    });
+  });
 };
