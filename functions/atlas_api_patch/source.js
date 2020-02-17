@@ -8,7 +8,7 @@ function uuidv4() {
 exports = function(url, body, func_name) 
 {
   tag = uuidv4(); 
-  context.functions.execute('log_message', 'INFO', 'atlas_api', func_name, url, tag);
+  // context.functions.execute('log_message', 'INFO', 'atlas_api', func_name, url, tag);
 
   const http = context.services.get('http');
   
