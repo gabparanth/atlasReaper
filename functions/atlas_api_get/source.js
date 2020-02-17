@@ -41,15 +41,13 @@ exports = function(url, func_name)
                 if ('error' in ret)
                 {
                   context.functions.execute('log_message', 'ERROR', 'atlas_api', func_name, ret, tag);
-                }
-                else
-                {
-                  context.functions.execute('log_message', 'INFO', 'atlas_api', func_name, ret, tag);
+                  throw `${func_name} : ${ret.detail}`
                 }
                 return ret;
               })
             .catch( error => {
                 context.functions.execute('log_message', 'ERROR', 'atlas_api', func_name, error, tag);
-            });
+                throw `${func_name} : ${error}`
+              });
     });
 };
