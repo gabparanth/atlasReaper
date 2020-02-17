@@ -9,7 +9,7 @@ exports = async function(changeEvent)
         await context.functions.execute('atlas_api_pause_cluster', task.details.project_id, task.cluster_name);
         // Update task
         const tasks = mongodb.db('atlas').collection('tasks');
-        await mongodb.updateOne( {'_id' : task['_id']} , { 'status' : { '$set' : 'PAUSING' }});
+        await tasks.updateOne( {'_id' : task['_id']} , { 'status' : { '$set' : 'PAUSING' }});
         context.functions.execute('log_message', 'INFO', 'trigger', 'trigger_execute_task', `Paused cluster ${task.projectName}:${task.clusterName}`, task.snapshot_id);
     }
     else
