@@ -6,7 +6,16 @@ exports = async function(changeEvent)
     const task_type = task.type;
     if ( task_type == 'PAUSE_CLUSTER' )
     {
-        await context.functions.execute('atlas_api_pause_cluster', task.details.project_id, task.cluster_name);
+        try
+        {
+            await context.functions.execute('atlas_api_pause_cluster', task.details.project_id, task.cluster_name);
+        }
+        catch(err)
+        {
+            // Just log errors - can get an error if the cluster is paused in the interim
+            context.functions.execute('log_message', 'WARN', 'trigger', 'trigger_execute_task', `${task.projectName}:${task.clusterName} - ${err}`, task.snapshot_id);    
+        }
+
         // Update task
         const tasks = mongodb.db('atlas').collection('tasks');
         await tasks.updateOne( {'_id' : task['_id']} , { 'status' : { '$set' : 'IN_PROGRESS' }});
