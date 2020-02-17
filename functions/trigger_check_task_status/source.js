@@ -22,8 +22,7 @@ exports = async function()
             {
                 if ( status.paused )
                 {
-                    const updated_ts = new Date(Date.now());
-                    await tasksCollection.updateOne( {'_id' : task['_id']} , { '$set' : { 'status' : 'DONE', 'last_updated' : updated_ts }});
+                    await context.functions.execute('update_task_status', task['_id'], task.last_updated, task.status, 'DONE');
                 }
                 else
                 {
@@ -34,8 +33,7 @@ exports = async function()
             {
                 if ( !status.biConnector.enabled )
                 {
-                    const updated_ts = new Date(Date.now());
-                    await tasksCollection.updateOne( {'_id' : task['_id']} , { '$set' : { 'status' : 'DONE', 'last_updated' : updated_ts }});
+                    await context.functions.execute('update_task_status', task['_id'], task.last_updated, task.status, 'DONE');
                 }
                 else
                 {
