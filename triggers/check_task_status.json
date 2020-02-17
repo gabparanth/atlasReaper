@@ -4,6 +4,6 @@
     "config": {
         "schedule": "*/10 * * * *"
     },
-    "function_name": "check_task_status",
-    "disabled": false
+    "function_name": "trigger_check_task_status",
+    "disabled": true
 }

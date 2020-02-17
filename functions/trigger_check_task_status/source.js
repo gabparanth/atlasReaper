@@ -5,7 +5,7 @@ exports = async function()
     // Get all tasks in progress
     const tasksCollection = mongodb.db("atlas").collection("tasks");
 
-    // Get all non paused, non M0 clusters that are set to be reaped
+    // Get all in progress tasks
     var filter = {
       'state': 'IN_PROGRESS'
     };
