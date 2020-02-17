@@ -34,6 +34,6 @@ exports = async function(changeEvent)
     var filter = {};
     filter['details.cluster_id'] = { '$nin' : snapshotClusterIds }
     var result = await active_clusters.deleteMany(filter);
-    var msg = `Inserted {insertedClusters} clusters, deleted {result.deletedCount}`;
+    var msg = `Inserted ${insertedClusters} clusters, deleted ${result.deletedCount}`;
     return context.functions.execute('log_message', 'INFO', 'trigger', 'trigger_process_snapshot', msg, snapshot.snapshot_id);
 };

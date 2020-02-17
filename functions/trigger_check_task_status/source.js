@@ -7,11 +7,11 @@ exports = async function()
 
     // Get all in progress tasks
     var filter = {
-      'state': 'IN_PROGRESS'
+      'status': 'IN_PROGRESS'
     };
    
     var tasks = await tasksCollection.find(filter).toArray(); 
-  
+
     const updated_ts = new Date(Date.now());
     for ( var i = 0; i < tasks.length; i++ )
     {
@@ -23,7 +23,7 @@ exports = async function()
             {
                 if ( status.paused )
                 {
-                    await tasks.updateOne( {'_id' : task['_id']} , { '$set' : { 'status' : 'DONE' }});
+                    await tasksCollection.updateOne( {'_id' : task['_id']} , { '$set' : { 'status' : 'DONE' }});
                 }
                 else
                 {
@@ -34,7 +34,7 @@ exports = async function()
         else
         {
             // Cluster has gone, mark task completed
-            await tasks.updateOne( {'_id' : task['_id']} , { '$set' : { 'status' : 'DONE' }});
+            await tasksCollection.updateOne( {'_id' : task['_id']} , { '$set' : { 'status' : 'DONE' }});
         }
     }
 };
