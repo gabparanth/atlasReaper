@@ -1,5 +1,5 @@
 {
     "name": "updateActiveClustersCollection",
-    "private": true,
+    "private": false,
     "can_evaluate": {}
 }
