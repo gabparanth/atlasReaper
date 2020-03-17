@@ -196,7 +196,7 @@ function submitForm(id) {
 
 function updateList() {
     document.getElementById("loader").style.display = "block";
-    client.callFunction('updateClustersCollection').then(() => {
+    client.callFunction('updateActiveClustersCollection').then(() => {
         getList(function (clusters) {
             printList(clusters);
             document.getElementById("loader").style.display = "none";

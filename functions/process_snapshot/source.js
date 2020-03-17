@@ -1,10 +1,11 @@
 
-exports = async function(changeEvent) 
+exports = async function(snapshot_id) 
 {
     const mongodb = context.services.get("MasterAtlas");
+    const cluster_snapshot = mongodb.db("atlas").collection("cluster_snapshot");
     const active_clusters = mongodb.db("atlas").collection("active_clusters");
 
-    const snapshot = changeEvent.fullDocument;
+    const snapshot = await cluster_snapshot.findOne({'_id' : snapshot_id});
 
     var snapshotClusterIds = [];
     var insertedClusters = 0;
