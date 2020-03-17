@@ -1,4 +1,7 @@
-const client = stitch.Stitch.initializeDefaultAppClient('atlasreaper-pmpzl');
+const STITCH_APP_ID = 'atlasreaper-pmpzl'
+// const STITCH_APP_ID = 'atlas-reaper-zrvos'
+
+const client = stitch.Stitch.initializeDefaultAppClient(STITCH_APP_ID);
 
 function checkAuth(callback) {
     if (!client.auth.isLoggedIn) {
