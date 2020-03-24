@@ -211,7 +211,6 @@ function updateList() {
 function closeForm() {
     document.getElementById("myForm").style.display = "none";
   }
-
 // function unPause(id, projectName, clusterName, ownerEmail) {
 //     // if (client.auth.user.profile.email == ownerEmail) {
 //     //     var confirmation = confirm(`Are you sure you want to remove ${projectName}/${clusterName}?`);
