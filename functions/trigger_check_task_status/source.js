@@ -15,37 +15,44 @@ exports = async function()
     for ( var i = 0; i < tasks.length; i++ )
     {
         const task = tasks[i];
-        var status = await context.functions.execute("atlas_api_get_cluster_details", task.details.project_id, task.cluster_name);
-        if ( status )
+        try
         {
-            if ( task.type == 'PAUSE_CLUSTER')
+            var status = await context.functions.execute("atlas_api_get_cluster_details", task.details.project_id, task.cluster_name);
+            if ( status )
             {
-                if ( status.paused )
+                if ( task.type == 'PAUSE_CLUSTER')
                 {
-                    await context.functions.execute('update_task_status', task['_id'], task.last_updated, task.status, 'DONE');
+                    if ( status.paused )
+                    {
+                        await context.functions.execute('update_task_status', task['_id'], task.last_updated, task.status, 'DONE');
+                    }
+                    else
+                    {
+                        // TODO: Warn if it's been a while?
+                    }
                 }
-                else
+                else if ( task.type == 'PAUSE_BI_CONNECTOR')
                 {
-                    // TODO: Warn if it's been a while?
+                    if ( !status.biConnector.enabled )
+                    {
+                        await context.functions.execute('update_task_status', task['_id'], task.last_updated, task.status, 'DONE');
+                    }
+                    else
+                    {
+                        // TODO: Warn if it's been a while?
+                    }
                 }
             }
-            else if ( task.type == 'PAUSE_BI_CONNECTOR')
+            else
             {
-                if ( !status.biConnector.enabled )
-                {
-                    await context.functions.execute('update_task_status', task['_id'], task.last_updated, task.status, 'DONE');
-                }
-                else
-                {
-                    // TODO: Warn if it's been a while?
-                }
+                // Cluster has gone, mark task completed
+                const updated_ts = new Date(Date.now());
+                await tasksCollection.updateOne( {'_id' : task['_id']} , { '$set' : { 'status' : 'DONE', 'last_updated' : updated_ts }});
             }
         }
-        else
+        catch (ex)
         {
-            // Cluster has gone, mark task completed
-            const updated_ts = new Date(Date.now());
-            await tasksCollection.updateOne( {'_id' : task['_id']} , { '$set' : { 'status' : 'DONE', 'last_updated' : updated_ts }});
+            context.functions.execute('log_message', 'ERROR', 'atlas_api', 'trigger_check_task_status', ex);
         }
     }
 };
