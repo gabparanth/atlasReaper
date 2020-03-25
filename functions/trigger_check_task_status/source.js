@@ -53,6 +53,7 @@ exports = async function()
         catch (ex)
         {
             context.functions.execute('log_message', 'ERROR', 'atlas_api', 'trigger_check_task_status', ex);
+            await tasksCollection.updateOne( {'_id' : task['_id']} , { '$set' : { 'status' : 'ERROR', 'last_updated' : updated_ts }});
         }
     }
 };
