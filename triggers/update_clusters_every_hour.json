@@ -4,6 +4,6 @@
     "config": {
         "schedule": "0 */1 * * *"
     },
-    "function_name": "create_snapshot_neur",
+    "function_name": "updateActiveClustersCollection",
     "disabled": false
 }
